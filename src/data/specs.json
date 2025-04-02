@@ -1,0 +1,11 @@
+[
+    { "label": "ST40T", "temp": 1460, "al2o3": 40, "fe2o3": 2.00, "density": 2.20, "porosity": 15.0, "strength": 60.0, "refractoriness": 1400 },
+    { "label": "ST40", "temp": 1460, "al2o3": 40, "fe2o3": 2.00, "density": 2.10, "porosity": 18.0, "strength": 35.0, "refractoriness": 1380 },
+    { "label": "ST40K", "temp": 1400, "al2o3": 40, "fe2o3": 1.50, "density": 2.15, "porosity": 16.0, "strength": 50.0, "refractoriness": 1300 },
+    { "label": "ST35", "temp": 1440, "al2o3": 35, "fe2o3": 2.20, "density": 2.10, "porosity": 18.0, "strength": 35.0, "refractoriness": 1360 },
+    { "label": "ST30", "temp": 1420, "al2o3": 30, "fe2o3": 2.40, "density": 2.10, "porosity": 18.0, "strength": 30.0, "refractoriness": 1340 },
+    { "label": "SP40", "temp": 1450, "al2o3": 40, "fe2o3": 2.00, "density": 2.00, "porosity": 21.0, "strength": 20.0, "refractoriness": 1320 },
+    { "label": "SP35", "temp": 1420, "al2o3": 35, "fe2o3": 2.20, "density": 2.00, "porosity": 21.0, "strength": 20.0, "refractoriness": 1300 },
+    { "label": "SP30", "temp": 1350, "al2o3": 30, "fe2o3": 2.60, "density": 2.00, "porosity": 21.0, "strength": 20.0, "refractoriness": 1280 },
+    { "label": "SP28", "temp": 1300, "al2o3": 28, "fe2o3": 2.40, "density": 2.00, "porosity": 24.0, "strength": 15.0, "refractoriness": 1300 }
+  ]
