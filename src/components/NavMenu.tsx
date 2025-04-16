@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { FaHome, FaInfoCircle, FaBox, FaCogs, FaPhone, FaQuestionCircle, FaBars, FaTimes } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
+import CartButton from './CartButton';
 
 export default function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,16 +34,16 @@ export default function NavMenu() {
 
   return (
     <>
-      {/* Іконка бургер-меню для мобільних пристроїв */}
-      {isMounted && (
+      <div className="md:hidden flex items-center space-x-4">
+        <CartButton />
         <button
-          className="md:hidden text-gray-700 focus:outline-none"
+          className="text-gray-700 focus:outline-none"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Toggle menu"
         >
           {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
         </button>
-      )}
+      </div>
 
       {/* Навігація для десктопу */}
       <nav className="hidden md:flex space-x-6 items-center">
@@ -64,6 +65,7 @@ export default function NavMenu() {
         <motion.a href="/faq" className="text-gray-700 flex items-center" variants={linkVariants} whileHover="hover">
           <FaQuestionCircle className="mr-1" /> FAQ
         </motion.a>
+        <CartButton />
       </nav>
 
       {/* Мобільне меню */}

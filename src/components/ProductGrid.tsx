@@ -4,15 +4,10 @@ import products from '../data/products.json';
 interface ProductGridProps {
   title?: string;
   limit?: number;
-  filter?: string | null;
 }
 
-export default function ProductGrid({ title, limit, filter }: ProductGridProps) {
-  let displayedProducts = limit ? products.slice(0, limit) : products;
-
-  if (filter) {
-    displayedProducts = displayedProducts.filter((product) => product.label.startsWith(filter));
-  }
+export default function ProductGrid({ title, limit }: ProductGridProps) {
+  const displayedProducts = limit ? products.slice(0, limit) : products;
 
   return (
     <section className="py-12">

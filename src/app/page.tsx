@@ -76,7 +76,7 @@ export default function Home() {
         whileInView="visible"
         viewport={{ once: true }}
       >
-        <ProductGrid title="Популярні розміри шамотних плит" limit={4} />
+        <ProductGrid title="Розміри шамотних плит"  />
       </motion.section>
 
       {/* Чому ми? */}
