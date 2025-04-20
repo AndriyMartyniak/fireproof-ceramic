@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/Header';
 import { Providers } from './providers';
 import Footer from '../components/Footer';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin', 'cyrillic'], weight: ['400', '600', '700'] });
 
@@ -48,7 +49,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="uk" className={inter.className}>
+    <html lang="uk">
+      <head>
+        <Script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
+        />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}');
+          `}
+        </Script>
+      </head>
       <body className="min-h-screen flex flex-col bg-gray-50 text-gray-900">
         <Providers>
           <Header />
