@@ -5,9 +5,10 @@ import { RootState } from '@/store/store';
 import { motion } from 'framer-motion';
 import ClientOnly from '@/components/ClientOnly';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { clearCart } from '@/store/cartSlice';
+import Script from 'next/script';
 
 interface FormData {
   firstName: string;
@@ -97,6 +98,15 @@ export default function CheckoutPage() {
   if (isSubmitted) {
     return (
       <div className="container mx-auto px-4 py-16">
+        <Script id="google-ads-conversion">
+          {`
+            gtag('event', 'conversion', {
+              'send_to': '${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID}/${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL}',
+              'value': 1.0,
+              'currency': 'UAH'
+            });
+          `}
+        </Script>
         <motion.div
           className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md text-center"
           initial={{ opacity: 0, y: 20 }}

@@ -13,10 +13,10 @@ export default function Contact() {
   return (
     <div className="bg-gray-50 min-h-screen py-16">
       <Head>
-        <title>Контакти - Termokeramika | Зв’яжіться з нами</title>
+        <title>Контакти - Термокераміка | Зв’яжіться з нами</title>
         <meta
           name="description"
-          content="Зв’яжіться з Termokeramika для консультації або замовлення шамотних плит. Заповніть форму, і наш менеджер зв’яжеться з вами!"
+          content="Зв’яжіться з Термокераміка для консультації або замовлення шамотних плит. Заповніть форму, і наш менеджер зв’яжеться з вами!"
         />
         <meta
           name="keywords"

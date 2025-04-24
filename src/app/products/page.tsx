@@ -13,7 +13,7 @@ export default function Products() {
   return (
     <div className="bg-gray-50 min-h-screen py-16">
       <Head>
-        <title>Шамотні плити - Termokeramika | Вогнетривкі плити для печей та камінів</title>
+        <title>Шамотні плити - Термокераміка | Вогнетривкі плити для печей та камінів</title>
         <meta
           name="description"
           content="Широкий асортимент шамотних плит від Termokeramika. Вогнетривкі плити для печей, камінів та промислових установок. Знайдіть ідеальний розмір або замовте індивідуально!"
