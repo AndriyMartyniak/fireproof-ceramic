@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import ContactForm from '../../components/ContactForm';
-import Head from 'next/head';
+import { FaPhone, FaEnvelope, FaClock } from 'react-icons/fa';
 
 export default function Contact() {
   const sectionVariants = {
@@ -12,18 +12,6 @@ export default function Contact() {
 
   return (
     <div className="bg-gray-50 min-h-screen py-16">
-      <Head>
-        <title>Контакти - Термокераміка | Зв’яжіться з нами</title>
-        <meta
-          name="description"
-          content="Зв’яжіться з Термокераміка для консультації або замовлення шамотних плит. Заповніть форму, і наш менеджер зв’яжеться з вами!"
-        />
-        <meta
-          name="keywords"
-          content="шамотна плита, вогнетривка плита, термокераміка, termokeramika, контакти"
-        />
-        <meta name="robots" content="index, follow" />
-      </Head>
       <div className="container mx-auto px-4">
         <motion.h1
           className="text-4xl md:text-5xl font-bold text-gray-900 text-center mb-12"
@@ -41,11 +29,20 @@ export default function Contact() {
           viewport={{ once: true }}
         >
           <ContactForm />
-          <div className="space-y-4">
-            <p className="text-lg text-gray-700">Телефон: +380 994 407 123</p>
-            <p className="text-lg text-gray-700">Email: thermoceramic.work@gmail.com</p>
-            <p className="text-lg text-gray-700">
-              Ми працюємо з понеділка по п’ятницю з 9:00 до 18:00. Звертайтесь, і ми з радістю відповімо на всі ваші запитання!
+          <div className="space-y-6">
+            <div className="bg-white rounded-lg shadow-md p-6 space-y-4">
+              <a href="tel:+380994407123" className="flex items-center gap-3 text-lg text-gray-800 hover:text-blue-600 transition-colors">
+                <FaPhone className="text-blue-500" /> +380 99 440 71 23
+              </a>
+              <a href="mailto:thermoceramic.work@gmail.com" className="flex items-center gap-3 text-lg text-gray-800 hover:text-blue-600 transition-colors break-all">
+                <FaEnvelope className="text-blue-500" /> thermoceramic.work@gmail.com
+              </a>
+              <p className="flex items-center gap-3 text-lg text-gray-700">
+                <FaClock className="text-blue-500" /> Пн–Пт: 9:00–18:00
+              </p>
+            </div>
+            <p className="text-gray-600">
+              Звертайтесь, і ми з радістю допоможемо підібрати шамотну плиту для вашого каміну, печі чи виробництва.
             </p>
           </div>
         </motion.div>

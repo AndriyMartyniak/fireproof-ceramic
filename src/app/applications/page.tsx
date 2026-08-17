@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Head from 'next/head';
 import { JSX, useState } from 'react';
 
 
@@ -48,18 +47,6 @@ export default function Applications() {
 
   return (
     <div className="bg-gray-50 min-h-screen py-16">
-     <Head>
-        <title>Застосування шамотних плит - Термокераміка | Вогнетривкі матеріали</title>
-        <meta
-          name="description"
-          content="Дізнайтесь, як шамотні плити від Термокераміка використовуються в металургії, керамічній та хімічній промисловості, а також у побутових камінах."
-        />
-        <meta
-          name="keywords"
-          content="шамотна плита, вогнетривка плита, термокераміка, termokeramika, застосування, металургія, керамічна промисловість"
-        />
-        <meta name="robots" content="index, follow" />
-      </Head>
       <div className="container mx-auto px-4">
         <motion.h1
           className="text-4xl md:text-5xl font-bold text-gray-900 text-center mb-12"

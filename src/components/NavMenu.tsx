@@ -5,6 +5,9 @@ import { FaHome, FaInfoCircle, FaBox, FaCogs, FaPhone, FaQuestionCircle, FaBars,
 import { useState, useEffect } from 'react';
 import CartButton from './CartButton';
 
+const PHONE_NUMBER = '+380994407123';
+const PHONE_DISPLAY = '+380 99 440 71 23';
+
 export default function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -65,6 +68,12 @@ export default function NavMenu() {
         <motion.a href="/faq" className="text-gray-700 flex items-center" variants={linkVariants} whileHover="hover">
           <FaQuestionCircle className="mr-1" /> FAQ
         </motion.a>
+        <a
+          href={`tel:${PHONE_NUMBER}`}
+          className="hidden lg:flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+        >
+          <FaPhone size={13} /> {PHONE_DISPLAY}
+        </a>
         <CartButton />
       </nav>
 
@@ -130,6 +139,13 @@ export default function NavMenu() {
           >
             <FaQuestionCircle className="mr-2" /> FAQ
           </motion.a>
+          <a
+            href={`tel:${PHONE_NUMBER}`}
+            className="flex items-center justify-center gap-2 bg-blue-500 text-white py-2.5 px-4 mx-4 mt-2 rounded-lg w-[calc(100%-2rem)] font-medium"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <FaPhone size={14} /> {PHONE_DISPLAY}
+          </a>
         </motion.nav>
       )}
     </>

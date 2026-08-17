@@ -5,11 +5,12 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart, updateQuantity } from '@/store/cartSlice';
 import { RootState } from '@/store/store';
-import { FaShoppingCart, FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
-import CartModal from './CartModal';
+import { FaShoppingCart, FaMinus, FaPlus, FaTrash, FaBolt } from 'react-icons/fa';
+import QuickOrderModal from './QuickOrderModal';
 import ClientOnly from './ClientOnly';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useCartDrawer } from './CartDrawerContext';
 
 interface Product {
   id: number;
@@ -26,11 +27,12 @@ interface ProductCardProps {
   index: number;
 }
 
-function CartActions({ product }: { product: Product }) {
+function CartActions({ product, onQuickOrder }: { product: Product; onQuickOrder: () => void }) {
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const cartItem = cartItems.find(item => item.id === product.id);
+  const { openDrawer } = useCartDrawer();
 
   const buttonVariants = {
     hover: { scale: 1.05, transition: { duration: 0.3 } },
@@ -44,6 +46,7 @@ function CartActions({ product }: { product: Product }) {
 
   const handleAddToCart = () => {
     dispatch(addToCart({ ...product, quantity }));
+    openDrawer();
   };
 
   const handleRemoveFromCart = () => {
@@ -104,6 +107,15 @@ function CartActions({ product }: { product: Product }) {
 
   return (
     <div className="space-y-3">
+      <motion.button
+        onClick={onQuickOrder}
+        className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-3 rounded-md cursor-pointer flex items-center justify-center space-x-2 text-sm font-semibold shadow-sm"
+        variants={buttonVariants}
+        whileHover="hover"
+      >
+        <FaBolt size={14} />
+        <span>Замовити в 1 клік</span>
+      </motion.button>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <label className="text-sm text-gray-600">Кількість:</label>
@@ -148,16 +160,12 @@ function CartActions({ product }: { product: Product }) {
 }
 
 export default function ProductCard({ product, index }: ProductCardProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isQuickOrderOpen, setIsQuickOrderOpen] = useState(false);
   const exchangeRate = 40;
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: index * 0.1 } },
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
   };
 
   // Конвертація ціни з EUR у UAH
@@ -176,9 +184,10 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           <div className="relative h-48 w-full">
             <Image
               src={product.image || '/images/fireproof-plate.webp'}
-              alt={product.label}
+              alt={`Шамотна плита ${product.dimensions} ${product.label} купити`}
               fill
               className="object-cover"
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
             />
           </div>
         </Link>
@@ -197,15 +206,15 @@ export default function ProductCard({ product, index }: ProductCardProps) {
           </p>
 
           <ClientOnly>
-            <CartActions product={product} />
+            <CartActions product={product} onQuickOrder={() => setIsQuickOrderOpen(true)} />
           </ClientOnly>
         </div>
       </motion.div>
 
-      <CartModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        productName={`Шамотна плита ${product.dimensions}`}
+      <QuickOrderModal
+        isOpen={isQuickOrderOpen}
+        onClose={() => setIsQuickOrderOpen(false)}
+        productLabel={`Шамотна плита ${product.dimensions} (${product.label})`}
       />
     </>
   );

@@ -9,9 +9,10 @@ import SpecsTable from '@/components/SpecsTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart, updateQuantity } from '@/store/cartSlice';
 import { RootState } from '@/store/store';
-import { FaShoppingCart, FaMinus, FaPlus, FaTrash, FaArrowLeft } from 'react-icons/fa';
+import { FaShoppingCart, FaMinus, FaPlus, FaTrash, FaArrowLeft, FaBolt, FaPhone } from 'react-icons/fa';
 import Link from 'next/link';
-import CartModal from '@/components/CartModal';
+import QuickOrderModal from '@/components/QuickOrderModal';
+import { useCartDrawer } from '@/components/CartDrawerContext';
 import Image from 'next/image';
 
 interface Product {
@@ -46,9 +47,10 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
 
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isQuickOrderOpen, setIsQuickOrderOpen] = useState(false);
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const cartItem = cartItems.find(item => item.id === product?.id);
+  const { openDrawer } = useCartDrawer();
 
   // Обробка випадку, якщо продукт не знайдено
   if (!product) {
@@ -101,7 +103,7 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
       quantity: quantity,
       image: product.image || '/images/fireproof-plate.webp'
     }));
-    setIsModalOpen(true);
+    openDrawer();
   };
 
   const handleRemoveFromCart = () => {
@@ -117,10 +119,6 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
     } else {
       dispatch(updateQuantity({ id: product.id, quantity: newQuantity }));
     }
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
   };
 
   return (
@@ -160,7 +158,7 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
             <div className="relative h-[400px] w-full">
               <Image
                 src="/images/fireproof-plate.webp"
-                alt={`Шамотна плита ${product.dimensions}`}
+                alt={`Шамотна плита ${product.dimensions} ${product.label} - купити з доставкою по Україні`}
                 fill
                 className="object-cover rounded-lg shadow-md hover:shadow-xl transition-all duration-300"
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -231,15 +229,26 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
                       className="w-20 px-2 py-1 border rounded-md"
                     />
                   </div>
-                  <motion.button
-                    onClick={handleAddToCart}
-                    className="bg-gray-900 hover:bg-gray-800 text-white py-2 px-6 rounded-md cursor-pointer inline-flex items-center space-x-2"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <FaShoppingCart />
-                    <span>Додати в корзину</span>
-                  </motion.button>
+                  <div className="flex flex-wrap gap-3">
+                    <motion.button
+                      onClick={() => setIsQuickOrderOpen(true)}
+                      className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-md cursor-pointer inline-flex items-center space-x-2 shadow-sm"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <FaBolt />
+                      <span>Замовити в 1 клік</span>
+                    </motion.button>
+                    <motion.button
+                      onClick={handleAddToCart}
+                      className="bg-gray-900 hover:bg-gray-800 text-white py-2 px-6 rounded-md cursor-pointer inline-flex items-center space-x-2"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <FaShoppingCart />
+                      <span>Додати в корзину</span>
+                    </motion.button>
+                  </div>
                 </div>
               )}
             </div>
@@ -254,8 +263,11 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
             viewport={{ once: true }}
           >
             <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-6">Опис продукту</h2>
+            <p className="text-lg text-gray-600 leading-relaxed mb-4">
+              Шамотна плита {product.dimensions} (шамотка) – це надійне рішення для футерування печей, камінів, а також промислових установок. Виготовлена з високоякісної шамотної глини, вона витримує екстремальні температури та забезпечує довговічність у найскладніших умовах. Цей продукт ідеально підходить для металургійної, керамічної та хімічної промисловості, а також для побутового використання.
+            </p>
             <p className="text-lg text-gray-600 leading-relaxed">
-              Шамотна плита {product.dimensions} – це надійне рішення для футерування печей, камінів, а також промислових установок. Виготовлена з високоякісної шамотної глини, вона витримує екстремальні температури та забезпечує довговічність у найскладніших умовах. Цей продукт ідеально підходить для металургійної, керамічної та хімічної промисловості, а також для побутового використання.
+              Шамотна плита {product.dimensions} часто використовується як сучасна заміна шамотній цеглі для каміну – вона легша, простіша в монтажі та так само стійка до температур до {productSpecs[0]?.temp || '1420'}°C.
             </p>
           </motion.div>
 
@@ -356,11 +368,30 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
         </div>
       </div>
 
-      <CartModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        productName={product ? `Шамотна плита ${product.dimensions}` : ''}
+      <QuickOrderModal
+        isOpen={isQuickOrderOpen}
+        onClose={() => setIsQuickOrderOpen(false)}
+        productLabel={`Шамотна плита ${product.dimensions} (${product.label})`}
       />
+
+      {/* Мобільна закріплена панель замовлення */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-white border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center gap-3">
+        <a
+          href="tel:+380994407123"
+          className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-lg h-12 w-12 shrink-0"
+          aria-label="Зателефонувати"
+        >
+          <FaPhone />
+        </a>
+        <button
+          onClick={() => setIsQuickOrderOpen(true)}
+          className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold h-12 rounded-lg flex items-center justify-center gap-2"
+        >
+          <FaBolt />
+          Замовити в 1 клік
+        </button>
+      </div>
+      <div className="md:hidden h-20" aria-hidden="true" />
     </>
   );
 }

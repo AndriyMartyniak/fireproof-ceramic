@@ -1,7 +1,8 @@
 'use client'
 
-import FAQAccordion from '@/components/FaqAccordion';
+import FAQAccordion, { faqs } from '@/components/FaqAccordion';
 import { motion } from 'framer-motion';
+import JsonLd from '@/components/JsonLd';
 
 export default function FAQ() {
   const sectionVariants = {
@@ -9,8 +10,19 @@ export default function FAQ() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
   };
 
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: { '@type': 'Answer', text: faq.a },
+    })),
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen py-16">
+      <JsonLd data={faqJsonLd} />
       <div className="container mx-auto px-4">
         <motion.h1
           className="text-4xl md:text-5xl font-bold text-gray-900 text-center mb-12"
@@ -18,7 +30,7 @@ export default function FAQ() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          Маркування шамотних плит
+          Шамотка, шамотна плита, маркування – відповіді на запитання
         </motion.h1>
 
         {/* Вступний блок */}

@@ -42,8 +42,6 @@ export default function CheckoutPage() {
     },
   });
 
-  const formEndpoint = `https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_ID}`;
-
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setIsSubmitting(true);
     setError(null);
@@ -62,13 +60,13 @@ export default function CheckoutPage() {
         totalPrice: parseFloat(item.priceInEuro) * 40 * item.quantity
       }));
 
-      const response = await fetch(formEndpoint, {
+      const response = await fetch('/api/telegram', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Accept: 'application/json',
         },
         body: JSON.stringify({
+          type: 'order',
           firstName: data.firstName,
           lastName: data.lastName,
           phone: data.phone,
@@ -77,7 +75,6 @@ export default function CheckoutPage() {
           notes: data.notes,
           orderDetails: orderDetails,
           totalAmount: totalAmount.toFixed(2) + ' ₴',
-          _subject: 'Нове замовлення з Termokeramika',
         }),
       });
 

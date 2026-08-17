@@ -5,6 +5,7 @@ import { FaShoppingCart } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { useState, useEffect } from 'react';
+import { useCartDrawer } from './CartDrawerContext';
 
 const buttonVariants = {
   hover: { scale: 1.1, color: '#60A5FA', transition: { duration: 0.3 } },
@@ -14,6 +15,7 @@ export default function CartButton() {
   const [mounted, setMounted] = useState(false);
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const cartItemsCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const { toggleDrawer } = useCartDrawer();
 
   useEffect(() => {
     setMounted(true);
@@ -21,23 +23,24 @@ export default function CartButton() {
 
   if (!mounted) {
     return (
-      <motion.a
-        href="/cart"
+      <motion.button
         className="text-gray-700 flex items-center relative"
         variants={buttonVariants}
         whileHover="hover"
+        aria-label="Кошик"
       >
         <FaShoppingCart className="text-xl" />
-      </motion.a>
+      </motion.button>
     );
   }
 
   return (
-    <motion.a
-      href="/cart"
+    <motion.button
+      onClick={toggleDrawer}
       className="text-gray-700 flex items-center relative"
       variants={buttonVariants}
       whileHover="hover"
+      aria-label="Кошик"
     >
       <FaShoppingCart className="text-xl" />
       {cartItemsCount > 0 && (
@@ -45,6 +48,6 @@ export default function CartButton() {
           {cartItemsCount}
         </span>
       )}
-    </motion.a>
+    </motion.button>
   );
-} 
+}

@@ -1,29 +1,41 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useEffect, useMemo, useState } from 'react';
 import ProductGrid from '../../components/ProductGrid';
-import Head from 'next/head';
+import ProductSearchBar from '../../components/ProductSearchBar';
+import JsonLd from '@/components/JsonLd';
+import { searchProducts } from '@/lib/searchProducts';
 
 export default function Products() {
+  const [query, setQuery] = useState('');
+
+  // Підхоплюємо ?q= з посилання (наприклад, з пошуку на головній)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q');
+    if (q) setQuery(q);
+  }, []);
+
+  const filteredProducts = useMemo(() => searchProducts(query), [query]);
+
   const sectionVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
   };
 
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Головна', item: 'https://termokeramika.com.ua' },
+      { '@type': 'ListItem', position: 2, name: 'Шамотні плити', item: 'https://termokeramika.com.ua/products' },
+    ],
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen py-16">
-      <Head>
-        <title>Шамотні плити - Термокераміка | Вогнетривкі плити для печей та камінів</title>
-        <meta
-          name="description"
-          content="Широкий асортимент шамотних плит від Termokeramika. Вогнетривкі плити для печей, камінів та промислових установок. Знайдіть ідеальний розмір або замовте індивідуально!"
-        />
-        <meta
-          name="keywords"
-          content="шамотна плита, вогнетривка плита, термокераміка, плита для печі, плита для каміна, termokeramika, вогнетривкі матеріали"
-        />
-        <meta name="robots" content="index, follow" />
-      </Head>
+      <JsonLd data={breadcrumbJsonLd} />
       <div className="container mx-auto px-4">
         <motion.h1
           className="text-4xl md:text-5xl font-bold text-gray-900 text-center mb-4"
@@ -31,16 +43,26 @@ export default function Products() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          Розміри шамотних плит
+          Шамотна плита купити – каталог розмірів
         </motion.h1>
         <motion.p
-          className="text-lg text-gray-600 text-center mb-12"
+          className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          Широкий асортимент розмірів для будь-яких потреб – від побутових камінів до промислових печей.
+          Шамотка (шамотна плита) від виробника – широкий асортимент розмірів для каміну, печі, барбекю та
+          промислових установок. Вогнетривка альтернатива шамотній цеглі з доставкою по всій Україні.
         </motion.p>
+
+        <div className="max-w-xl mx-auto mb-10">
+          <ProductSearchBar value={query} onChange={setQuery} />
+          {query && (
+            <p className="text-sm text-gray-500 mt-2 text-center">
+              Знайдено: {filteredProducts.length} з 50
+            </p>
+          )}
+        </div>
 
         {/* Сітка продуктів */}
         <motion.div
@@ -49,7 +71,7 @@ export default function Products() {
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <ProductGrid />
+          <ProductGrid products={filteredProducts} />
         </motion.div>
 
         {/* Заклик до дії */}

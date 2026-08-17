@@ -34,27 +34,22 @@ export default function ContactForm() {
     hover: { scale: 1.05, transition: { duration: 0.3 } },
   };
 
-  const formEndpoint = `https://formspree.io/f/${process.env.NEXT_PUBLIC_FORMSPREE_ID}`;
-
-
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setIsSubmitting(true);
     setError(null);
 
     try {
-      const response = await fetch(formEndpoint, {
+      const response = await fetch('/api/telegram', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Accept: 'application/json',
         },
         body: JSON.stringify({
+          type: 'contact',
           name: data.name,
           phone: data.phone,
           email: data.email,
           message: data.message,
-          _subject: 'Нове повідомлення з Termokeramika', // Тема листа
-          _replyto: data.email || 'no-reply@termokeramika.com.ua', // Email для відповіді
         }),
       });
 
