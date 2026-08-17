@@ -4,7 +4,7 @@ import cartReducer, { CartItem } from './cartSlice';
 // Middleware для збереження корзини в localStorage
 const localStorageMiddleware: Middleware = (store) => (next) => (action: any) => {
   const result = next(action);
-  if (action.type?.startsWith('cart/')) {
+  if (typeof window !== 'undefined' && action.type?.startsWith('cart/')) {
     const cartItems = store.getState().cart.items;
     localStorage.setItem('cart', JSON.stringify(cartItems));
   }
@@ -13,6 +13,8 @@ const localStorageMiddleware: Middleware = (store) => (next) => (action: any) =>
 
 // Завантаження початкового стану з localStorage
 const loadCartFromStorage = (): CartItem[] => {
+  if (typeof window === 'undefined') return [];
+
   try {
     const serializedCart = localStorage.getItem('cart');
     if (serializedCart === null) return [];
